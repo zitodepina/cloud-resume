@@ -5,7 +5,7 @@ async function updateCounter() {
             "https://cv5w5jmhloyiqm7euhsl5724l40ghbbc.lambda-url.us-east-1.on.aws/"
         );
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         let data = await response.json();
         counter.innerHTML = `👀 Views: ${data}`;
