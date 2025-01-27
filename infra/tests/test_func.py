@@ -6,7 +6,7 @@ from unittest import mock
 
 import boto3
 import pytest
-from moto
+import moto
 
 import func
 
