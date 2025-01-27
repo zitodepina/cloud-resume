@@ -10,8 +10,9 @@ from moto import mock_dynamodb
 
 import func
 
-@pytest.fixture
+sys.path.append("infra/")
 
+@pytest.fixture
 def dynamo_table():
 
     with mock_dynamodb():
