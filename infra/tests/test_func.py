@@ -65,7 +65,7 @@ def test_update_visitor_count_success(data_table_with_transactions):
 
     # Call the Lambda function
     #response = func.lambda_handler({'httpMethod': 'GET'})
-    response = func.lambda_handler({}, {})
+    response = lambda_handler({}, {})
 
     # Assert that the count is incremented
     assert response['statusCode'] == 200
