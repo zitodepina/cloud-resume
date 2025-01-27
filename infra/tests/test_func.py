@@ -8,6 +8,8 @@ import boto3
 import pytest
 from moto import mock_dynamodb
 
+import func
+
 @pytest.fixture
 
 def dynamo_table():
@@ -42,19 +44,14 @@ def test_update_visitor_count_success(dynamo_table):
 
     dynamo_table.put_item(Item={'id': 'visitor_count', 'count': {'N': '0'}})
 
-
-
     # Call the Lambda function
-
-    response = update_visitor_count({'httpMethod': 'GET'})
-
+    response = func.lambda_handler({'httpMethod': 'GET'})
 
 
     # Assert that the count is incremented
-
     assert response['statusCode'] == 200
-
     assert response['body'] == '{"count": 1}' 
+
 
 def test_update_visitor_count_error_handling(dynamo_table):
 
@@ -64,4 +61,4 @@ def test_update_visitor_count_error_handling(dynamo_table):
 
         dynamo_table.put_item(Item={'id': 'visitor_count', 'count': {'N': '0'}})
 
-        response = update_visitor_count({'httpMethod': 'GET'})
+        response = func.lambda_handler({'httpMethod': 'GET'})
