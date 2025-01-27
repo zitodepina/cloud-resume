@@ -9,9 +9,8 @@ import pytest
 import moto
 
 import sys
-sys.path.append('../')
 
-from func import *
+from .infra.Lambda.func import *
 
 TABLE_NAME = "data"
 
