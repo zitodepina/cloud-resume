@@ -41,12 +41,11 @@ def dynamo_table():
 def test_update_visitor_count_success(dynamo_table):
 
     # Create a test visitor count in DynamoDB
-
     dynamo_table.put_item(Item={'id': 'visitor_count', 'count': {'N': '0'}})
 
     # Call the Lambda function
-    response = func.lambda_handler({'httpMethod': 'GET'})
-
+    #response = func.lambda_handler({'httpMethod': 'GET'})
+    response = func.lambda_handler({}, {})
 
     # Assert that the count is incremented
     assert response['statusCode'] == 200
