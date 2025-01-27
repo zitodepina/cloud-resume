@@ -56,7 +56,7 @@ def test_update_visitor_count_success(dynamo_table):
 
     assert response['body'] == '{"count": 1}' 
 
-    def test_update_visitor_count_error_handling(dynamo_table):
+def test_update_visitor_count_error_handling(dynamo_table):
 
     # Simulate a DynamoDB error
 
