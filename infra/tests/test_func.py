@@ -6,23 +6,23 @@ from unittest import mock
 
 import boto3
 import pytest
-from moto import mock_dynamodb
+from moto
 
 import func
 
-sys.path.append("infra/")
+TABLE_NAME = "data"
+
 
 @pytest.fixture
 def dynamo_table():
 
-    with mock_dynamodb():
+    with moto.mock_dynamodb():
 
         dynamo = boto3.resource('dynamodb')
 
         table = dynamo.create_table(
 
-            TableName='visitor_count',
-
+            TableName=TABLE_NAME,
             KeySchema=[
 
                 {'AttributeName': 'id', 'KeyType': 'HASH'}
@@ -36,13 +36,30 @@ def dynamo_table():
             ]
 
         )
+        yield TABLE_NAME
 
-        yield table
 
-def test_update_visitor_count_success(dynamo_table):
+
+def data_table_with_transactions(dynamo_table):
+    """Creates transactions"""
+
+    table = boto3.resource("dynamodb").Table(dynamo_table)
+    views = 1
+
+    response = table.update_item(
+        Key={'id':'0'},
+        UpdateExpression='SET #v = :val',
+        ExpressionAttributeNames={'#v': 'views'},
+        ExpressionAttributeValues={':val': views}
+    )
+
+
+
+@pytest.fixture
+def test_update_visitor_count_success(data_table_with_transactions):
 
     # Create a test visitor count in DynamoDB
-    dynamo_table.put_item(Item={'id': 'visitor_count', 'count': {'N': '0'}})
+   # dynamo_table.put_item(Item={'id': 'visitor_count', 'count': {'N': '0'}})
 
     # Call the Lambda function
     #response = func.lambda_handler({'httpMethod': 'GET'})
