@@ -1,0 +1,67 @@
+import importlib
+import json
+import os
+import sys
+from unittest import mock
+
+import boto3
+import pytest
+from moto import mock_dynamodb
+
+@pytest.fixture
+
+def dynamo_table():
+
+    with moto.mock_dynamodb():
+
+        dynamo = boto3.resource('dynamodb')
+
+        table = dynamo.create_table(
+
+            TableName='visitor_count',
+
+            KeySchema=[
+
+                {'AttributeName': 'id', 'KeyType': 'HASH'}
+
+            ],
+
+            AttributeDefinitions=[
+
+                {'AttributeName': 'id', 'AttributeType': 'S'}
+
+            ]
+
+        )
+
+        yield table
+
+def test_update_visitor_count_success(dynamo_table):
+
+    # Create a test visitor count in DynamoDB
+
+    dynamo_table.put_item(Item={'id': 'visitor_count', 'count': {'N': '0'}})
+
+
+
+    # Call the Lambda function
+
+    response = update_visitor_count({'httpMethod': 'GET'})
+
+
+
+    # Assert that the count is incremented
+
+    assert response['statusCode'] == 200
+
+    assert response['body'] == '{"count": 1}' 
+
+    def test_update_visitor_count_error_handling(dynamo_table):
+
+    # Simulate a DynamoDB error
+
+    with pytest.raises(ClientError):
+
+        dynamo_table.put_item(Item={'id': 'visitor_count', 'count': {'N': '0'}})
+
+        response = update_visitor_count({'httpMethod': 'GET'})
