@@ -12,7 +12,7 @@ from moto import mock_dynamodb
 
 def dynamo_table():
 
-    with moto.mock_dynamodb():
+    with mock_dynamodb():
 
         dynamo = boto3.resource('dynamodb')
 
