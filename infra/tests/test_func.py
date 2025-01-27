@@ -10,7 +10,7 @@ import moto
 
 import sys
 
-import lambda.func
+import ../func
 
 TABLE_NAME = "data"
 
