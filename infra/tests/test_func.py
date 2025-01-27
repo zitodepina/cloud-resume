@@ -8,7 +8,7 @@ import boto3
 import pytest
 import moto
 
-import func
+from func import *
 
 TABLE_NAME = "data"
 
