@@ -10,7 +10,7 @@ import moto
 
 import sys
 
-import infra.src.func *
+import infra.src.func
 
 TABLE_NAME = "data"
 
