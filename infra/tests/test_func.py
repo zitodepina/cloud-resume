@@ -10,7 +10,7 @@ import moto
 
 import sys
 
-from lambda.func import *
+from func import *
 
 TABLE_NAME = "data"
 
