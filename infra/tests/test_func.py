@@ -10,7 +10,7 @@ import moto
 
 import sys
 
-from src.func import lambda_handler
+from infra.src.func import lambda_handler
 
 TABLE_NAME = "data"
 
