@@ -55,14 +55,8 @@ def data_table_with_transactions(dynamo_table):
 @pytest.fixture
 def test_update_visitor_count_success(data_table_with_transactions):
 
-   views = 1 
     # Create a test visitor count in DynamoDB
-   response = table.update_item(
-        Key={'id':'0'},
-        UpdateExpression='SET #v = :val',
-        ExpressionAttributeNames={'#v': 'views'},
-        ExpressionAttributeValues={':val': views}
-    )
+   # dynamo_table.put_item(Item={'id': 'visitor_count', 'count': {'N': '0'}})
 
     # Call the Lambda function
     #response = func.lambda_handler({'httpMethod': 'GET'})
