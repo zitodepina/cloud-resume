@@ -2,6 +2,9 @@ import boto3
 import pytest
 import moto
 
+import sys
+sys.path.insert (0, 'infra/src')
+
 from func import lambda_handler
 
 TABLE_NAME = "data"
