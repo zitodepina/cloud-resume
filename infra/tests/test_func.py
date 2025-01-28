@@ -1,14 +1,6 @@
-import importlib
-import json
-import os
-import sys
-from unittest import mock
-
 import boto3
 import pytest
 import moto
-
-import sys
 
 from func import lambda_handler
 

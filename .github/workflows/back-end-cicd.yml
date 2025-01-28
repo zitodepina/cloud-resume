@@ -14,7 +14,7 @@ env:
   SOURCE_DIR: 'website'
   DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
   PYTHON_VERSION: 3.12
-  BACKEND_PATH: infra/tests
+  BACKEND_PATH: infra
 
 jobs:
   testing:
