@@ -14,7 +14,7 @@ env:
   SOURCE_DIR: 'website'
   DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
   PYTHON_VERSION: 3.12
-  BACKEND_PATH: infra/
+  BACKEND_PATH: infra/tests
 
 jobs:
   testing:
@@ -36,4 +36,4 @@ jobs:
           flake8 ${{ env.BACKEND_PATH }} --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Run pytest with coverage report
         run: |
-          pytest -vvv --capture=tee-sys --cov=${{ env.BACKEND_PATH/tests }}
+          pytest -vvv --capture=tee-sys --cov=${{ env.BACKEND_PATH }}
