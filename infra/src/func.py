@@ -1,6 +1,6 @@
 import boto3
 
-dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
+dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('cloud-resume')
 
 def lambda_handler(event, context):

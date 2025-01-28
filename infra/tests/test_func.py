@@ -15,7 +15,7 @@ def dynamo_table():
 
     with moto.mock_dynamodb():
 
-        dynamo = boto3.resource('dynamodb')
+        dynamo = boto3.resource('dynamodb', region_name="us-east-1")
 
         table = dynamo.create_table(
 
