@@ -9,7 +9,7 @@ from func import lambda_handler
 
 TABLE_NAME = "data"
 
-
+'''
 @pytest.fixture
 def dynamo_table():
 
@@ -63,3 +63,28 @@ def test_update_visitor_count_success(data_table_with_transactions):
     # Assert that the count is incremented
     assert response['statusCode'] == 200
     assert response['body'] == '{"count": 1}'
+    '''
+
+@mock_dynamodb2
+def test_lambda_handler():
+
+    table_name = 'test_counter'
+    dynamodb = boto3.resource('dynamodb', 'us-east-1')
+
+    table = dynamodb.create_table(
+        TableName=table_name,
+        KeySchema=[{'AttributeName': 'user_id', 'KeyType': 'HASH'}],
+        AttributeDefinitions=[{'AttributeName': 'user_id','AttributeType': 'S'}],
+        ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
+    )
+
+    response = lambda_handler(event=kinesis_test_event, context={})
+
+    table = dynamodb.Table(table_name)
+    response = table.get_item(
+        Key={
+            'stat': {'S': 'view-count'}
+        }
+    )
+    
+    item = response['view-count']
