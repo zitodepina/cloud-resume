@@ -1,6 +1,6 @@
 import boto3
 import pytest
-import moto
+import mock
 
 import sys
 sys.path.insert (0, 'infra/src')
@@ -62,3 +62,4 @@ def test_update_visitor_count_success(data_table_with_transactions):
     # Assert that the count is incremented
     assert response['statusCode'] == 200
     assert response['body'] == '{"count": 1}'
+    
