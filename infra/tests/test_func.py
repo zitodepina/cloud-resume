@@ -65,7 +65,7 @@ def test_update_visitor_count_success(data_table_with_transactions):
     assert response['body'] == '{"count": 1}'
     '''
 
-@mock_dynamodb2
+@mock_dynamodb
 def test_lambda_handler():
 
     table_name = 'test_counter'
@@ -78,7 +78,7 @@ def test_lambda_handler():
         ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
     )
 
-    response = lambda_handler(event=kinesis_test_event, context={})
+    response = lambda_handler({}, {})
 
     table = dynamodb.Table(table_name)
     response = table.get_item(
