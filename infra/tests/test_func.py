@@ -65,7 +65,7 @@ def test_update_visitor_count_success(data_table_with_transactions):
     assert response['body'] == '{"count": 1}'
     '''
 
-@moto.mock_dynamodb
+@moto.mock_dynamodb2
 def test_lambda_handler():
 
     table_name = 'test_counter'
