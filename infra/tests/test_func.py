@@ -1,6 +1,6 @@
 import boto3
 import pytest
-import moto
+from moto import mock_dynamodb
 
 import sys
 sys.path.insert (0, 'infra/src')
