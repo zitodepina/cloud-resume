@@ -36,7 +36,7 @@ def dynamo_table():
         yield TABLE_NAME
 
 
-
+@pytest.fixture
 def data_table_with_transactions(dynamo_table):
     """Creates transactions"""
 
@@ -51,8 +51,6 @@ def data_table_with_transactions(dynamo_table):
     )
 
 
-
-@pytest.fixture
 def test_update_visitor_count_success(data_table_with_transactions):
 
     # Create a test visitor count in DynamoDB
