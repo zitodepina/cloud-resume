@@ -1,6 +1,6 @@
 import boto3
 import pytest
-from moto import mock_dynamodb2
+from moto
 
 import sys
 sys.path.insert (0, 'infra/src')
@@ -65,7 +65,7 @@ def test_update_visitor_count_success(data_table_with_transactions):
     assert response['body'] == '{"count": 1}'
     '''
 
-@mock_dynamodb2
+@moto.mock_dynamodb
 def test_lambda_handler():
 
     table_name = 'test_counter'
