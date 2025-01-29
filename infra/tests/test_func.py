@@ -1,6 +1,6 @@
 import boto3
 import pytest
-from moto
+import moto
 
 import sys
 sys.path.insert (0, 'infra/src')
