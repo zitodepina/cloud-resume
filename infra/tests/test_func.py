@@ -12,7 +12,7 @@ TABLE_NAME = "data"
 @pytest.fixture
 def dynamo_table():
 
-    with moto.mock_dynamodb():
+    with mock_dynamodb():
 
         dynamo = boto3.resource('dynamodb', region_name="us-east-1")
 
