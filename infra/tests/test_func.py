@@ -17,17 +17,17 @@ TABLE_NAME = "data"
 @pytest.fixture()
 def aws_credentials():
     """Mocked AWS Credentials for moto library."""
-    export AWS_ACCESS_KEY_ID='testing'
-    export AWS_SECRET_ACCESS_KEY='testing'
-    export AWS_SECURITY_TOKEN='testing'
-    export AWS_SESSION_TOKEN='testing'
-    export AWS_DEFAULT_REGION='us-east-1'
+    os.environ["AWS_ACCESS_KEY_ID"] = "testing"
+    os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
+    os.environ["AWS_SECURITY_TOKEN"] = "testing"
+    os.environ["AWS_SESSION_TOKEN"] = "testing"
+    os.environ["AWS_DEFAULT_REGION"] = "us-east-1
 
-@mock_dynamodb
+@mock_mock_aws
 def test_lambda_handler_existing_entries(aws_credentials):
     """Testing visitors updating when there are entries available in dynamodb table."""
     app_module = importlib.import_module("src.func")
-    table = table = app_module.dynamodb.create_table(
+    table = app_module.dynamodb.create_table(
         TableName=TABLE_NAME,
         KeySchema=[{"AttributeName": "key", "KeyType": "HASH"}],
         AttributeDefinitions=[
@@ -40,11 +40,11 @@ def test_lambda_handler_existing_entries(aws_credentials):
     )
     table.wait_until_exists()
 
-    app_module.dynamodb_table.put_item(
+    app_module.dynamodb.put_item(
         Item={"key": "0", "views": 1},
     )
 
-    response = app_module.handler({}, {})
+    response = app_module.lambda_handler({}, {})
 
     assert response["statusCode"] == 200
     assert response["body"] == json.dumps({"visits": 2})
@@ -61,11 +61,11 @@ def test_lambda_handler_existing_entries(aws_credentials):
 
     assert int(dynamodb_response["Item"]["views"]) == 2
 
-@mock_dynamodb
+@mock_mock_aws
 def test_lambda_handler_empty_table(aws_credentials):
     """Testing visitors updating when there are no entries in dynamodb table."""
     app_module = importlib.import_module("src.func")
-    table = table = app_module.dynamodb.create_table(
+    table = app_module.dynamodb.create_table(
          TableName=TABLE_NAME,
         KeySchema=[{"AttributeName": "key", "KeyType": "HASH"}],
         AttributeDefinitions=[
@@ -78,7 +78,7 @@ def test_lambda_handler_empty_table(aws_credentials):
     )
     table.wait_until_exists()
 
-    response = app_module.handler({}, {})
+    response = app_module.lambda_handler({}, {})
 
     assert response["statusCode"] == 200
     assert response["body"] == json.dumps({"visits": 1})
