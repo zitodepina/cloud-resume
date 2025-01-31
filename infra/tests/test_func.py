@@ -25,7 +25,7 @@ def dynamo_table():
 
     with moto.mock_dynamodb():
         dynamo = boto3.resource('dynamodb', region_name="us-east-1")
-         table = dynamo.create_table(
+        table = dynamo.create_table(
             TableName=TABLE_NAME,
             KeySchema=[
                 {"AttributeName": "id", "KeyType": "HASH"}
