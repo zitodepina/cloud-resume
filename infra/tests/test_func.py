@@ -1,6 +1,7 @@
 import importlib
 import boto3
 import pytest
+import json
 from unittest import mock
 from moto import mock_dynamodb
 
