@@ -1,6 +1,7 @@
 import boto3
 import pytest
-import moto
+from unittest import mock
+from moto import mock_dynamodb
 
 import sys
 sys.path.insert (0, 'infra/src')
@@ -9,10 +10,10 @@ from func import lambda_handler
 
 TABLE_NAME = "data"
 
-@pytest.fixture
+@mock_dynamodb
 def dynamo_table():
 
-    with mock_dynamodb():
+    with moto.mock_dynamodb():
 
         dynamo = boto3.resource('dynamodb', region_name="us-east-1")
 
@@ -22,12 +23,15 @@ def dynamo_table():
             KeySchema=[
 
                 {'AttributeName': 'id', 'KeyType': 'HASH'}
+                {'AttributeName': 'views', 'KeyType': 'HASH'}
+
 
             ],
 
             AttributeDefinitions=[
 
                 {'AttributeName': 'id', 'AttributeType': 'S'}
+                {'AttributeName': 'views', 'AttributeType': 'N'}
 
             ]
 
