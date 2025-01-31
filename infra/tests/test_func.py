@@ -20,32 +20,22 @@ def aws_credentials():
     os.environ["AWS_SESSION_TOKEN"] = "testing"
     os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
 
-@mock_dynamodb
+@pytest.fixture
 def dynamo_table():
 
     with moto.mock_dynamodb():
-
         dynamo = boto3.resource('dynamodb', region_name="us-east-1")
-
-        table = dynamo.create_table(
-
+         table = dynamo.create_table(
             TableName=TABLE_NAME,
             KeySchema=[
-
-                {'AttributeName': 'id', 'KeyType': 'HASH'}
-                {'AttributeName': 'views', 'KeyType': 'HASH'}
-
-
-            ],
-
+                {"AttributeName": "id", "KeyType": "HASH"}
+                {"AttributeName": "views", "KeyType": "HASH"}
+                  ],
             AttributeDefinitions=[
-
-                {'AttributeName': 'id', 'AttributeType': 'S'}
-                {'AttributeName': 'views', 'AttributeType': 'N'}
-
-            ]
-
-        )
+                {"AttributeName": "id", "AttributeType": "S"}
+                {"AttributeName": "views", "AttributeType": "N"}
+                ]
+            )
         yield TABLE_NAME
 
 
