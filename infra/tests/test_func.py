@@ -22,20 +22,21 @@ def aws_credentials():
 
 @pytest.fixture
 def dynamo_table():
-
     with moto.mock_dynamodb():
         dynamo = boto3.resource('dynamodb', region_name="us-east-1")
         table = dynamo.create_table(
+            AttributeDefinitions=[
+                {"AttributeName": "id", "AttributeType": "S"},
+                {"AttributeName": "views", "AttributeType": "N"}
+            ],
             TableName=TABLE_NAME,
             KeySchema=[
-                {"AttributeName": "id", "KeyType": "HASH"}
-                {"AttributeName": "views", "KeyType": "HASH"}
-                  ],
-            AttributeDefinitions=[
-                {"AttributeName": "id", "AttributeType": "S"}
-                {"AttributeName": "views", "AttributeType": "N"}
-                ]
-            )
+                {"AttributeName": "id", "KeyType": "HASH"},
+                {"AttributeName": "views", "KeyType": "RANGE"}
+            ],
+            BillingMode="PAY_PER_REQUEST"
+        )
+
         yield TABLE_NAME
 
 
