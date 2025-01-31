@@ -1,8 +1,8 @@
-import boto3
-import pytest
 import os
-from unittest import mock
-from moto import mock_dynamodb
+
+import boto3
+import moto
+import pytest
 
 import sys
 sys.path.insert (0, 'infra/src')
