@@ -1,3 +1,4 @@
+import importlib
 import boto3
 import pytest
 from unittest import mock
@@ -6,64 +7,78 @@ from moto import mock_dynamodb
 import sys
 sys.path.insert (0, 'infra/src')
 
-from func import lambda_handler
+#from func import lambda_handler
 
 TABLE_NAME = "data"
 
 @mock_dynamodb
-def dynamo_table():
+def test_lambda_handler_existing_entries():
+    """Testing visitors updating when there are entries available in dynamodb table."""
+    app_module = importlib.import_module("src.func")
+    table = table = app_module.dynamodb.create_table(
+        TableName=TABLE_NAME,
+        KeySchema=[{"AttributeName": "key", "KeyType": "HASH"}],
+        AttributeDefinitions=[
+            {
+                "AttributeName": "key",
+                "AttributeType": "S",
+            },
+        ],
+        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
+    )
+    table.wait_until_exists()
 
-    with moto.mock_dynamodb():
-
-        dynamo = boto3.resource('dynamodb', region_name="us-east-1")
-
-        table = dynamo.create_table(
-
-            TableName=TABLE_NAME,
-            KeySchema=[
-
-                {'AttributeName': 'id', 'KeyType': 'HASH'}
-                {'AttributeName': 'views', 'KeyType': 'HASH'}
-
-
-            ],
-
-            AttributeDefinitions=[
-
-                {'AttributeName': 'id', 'AttributeType': 'S'}
-                {'AttributeName': 'views', 'AttributeType': 'N'}
-
-            ]
-
-        )
-        yield TABLE_NAME
-
-
-@pytest.fixture
-def data_table_with_transactions(dynamo_table):
-    """Creates transactions"""
-
-    table = boto3.resource("dynamodb").Table(dynamo_table)
-    views = 1
-
-    response = table.update_item(
-        Key={'id':'0'},
-        UpdateExpression='SET #v = :val',
-        ExpressionAttributeNames={'#v': 'views'},
-        ExpressionAttributeValues={':val': views}
+    app_module.dynamodb_table.put_item(
+        Item={"key": "0", "views": 1},
     )
 
+    response = app_module.handler({}, {})
 
-def test_update_visitor_count_success(data_table_with_transactions):
+    assert response["statusCode"] == 200
+    assert response["body"] == json.dumps({"visits": 2})
+    '''
+    assert response["headers"]["Content-Type"] == "application/json"
+    assert response["headers"]["Access-Control-Allow-Headers"] == "Content-Type, Origin"
+    assert response["headers"]["Access-Control-Allow-Origin"] == "http://localhost"
+    assert response["headers"]["Access-Control-Allow-Methods"] == "OPTIONS,POST,GET"
+    '''
 
-    # Create a test visitor count in DynamoDB
-   # dynamo_table.put_item(Item={'id': 'visitor_count', 'count': {'N': '0'}})
+    dynamodb_response = app_module.table.get_item(
+        Key={"keyw": "0"}
+    )
 
-    # Call the Lambda function
-    #response = func.lambda_handler({'httpMethod': 'GET'})
-    response = lambda_handler({}, {})
+    assert int(dynamodb_response["Item"]["views"]) == 2
 
-    # Assert that the count is incremented
-    assert response['statusCode'] == 200
-    assert response['body'] == '{"count": 1}'
-    
+@mock_dynamodb
+def test_lambda_handler_empty_table():
+    """Testing visitors updating when there are no entries in dynamodb table."""
+    app_module = importlib.import_module("src.func")
+    table = table = app_module.dynamodb.create_table(
+         TableName=TABLE_NAME,
+        KeySchema=[{"AttributeName": "key", "KeyType": "HASH"}],
+        AttributeDefinitions=[
+            {
+                "AttributeName": "key",
+                "AttributeType": "S",
+            },
+        ],
+        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
+    )
+    table.wait_until_exists()
+
+    response = app_module.handler({}, {})
+
+    assert response["statusCode"] == 200
+    assert response["body"] == json.dumps({"visits": 1})
+    '''
+    assert response["headers"]["Content-Type"] == "application/json"
+    assert response["headers"]["Access-Control-Allow-Headers"] == "Content-Type, Origin"
+    assert response["headers"]["Access-Control-Allow-Origin"] == "http://localhost"
+    assert response["headers"]["Access-Control-Allow-Methods"] == "OPTIONS,POST,GET"
+    '''
+
+    dynamodb_response = app_module.table.get_item(
+        Key={"CounterName": "visitorsCounter"}
+    )
+
+    assert int(dynamodb_response["Item"]["visits"]) == 1
