@@ -3,7 +3,8 @@ import boto3
 import pytest
 import json
 from unittest import mock
-from moto import mock_dynamodb
+
+from moto import mock_aws
 
 import sys
 sys.path.insert (0, 'infra/src')
@@ -12,8 +13,18 @@ sys.path.insert (0, 'infra/src')
 
 TABLE_NAME = "data"
 
+
+@pytest.fixture()
+def aws_credentials():
+    """Mocked AWS Credentials for moto library."""
+   export AWS_ACCESS_KEY_ID='testing'
+   export AWS_SECRET_ACCESS_KEY='testing'
+   export AWS_SECURITY_TOKEN='testing'
+   export AWS_SESSION_TOKEN='testing'
+   export AWS_DEFAULT_REGION='us-east-1'
+
 @mock_dynamodb
-def test_lambda_handler_existing_entries():
+def test_lambda_handler_existing_entries(aws_credentials):
     """Testing visitors updating when there are entries available in dynamodb table."""
     app_module = importlib.import_module("src.func")
     table = table = app_module.dynamodb.create_table(
@@ -51,7 +62,7 @@ def test_lambda_handler_existing_entries():
     assert int(dynamodb_response["Item"]["views"]) == 2
 
 @mock_dynamodb
-def test_lambda_handler_empty_table():
+def test_lambda_handler_empty_table(aws_credentials):
     """Testing visitors updating when there are no entries in dynamodb table."""
     app_module = importlib.import_module("src.func")
     table = table = app_module.dynamodb.create_table(
