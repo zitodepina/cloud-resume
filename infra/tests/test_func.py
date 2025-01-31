@@ -17,11 +17,11 @@ TABLE_NAME = "data"
 @pytest.fixture()
 def aws_credentials():
     """Mocked AWS Credentials for moto library."""
-   export AWS_ACCESS_KEY_ID='testing'
-   export AWS_SECRET_ACCESS_KEY='testing'
-   export AWS_SECURITY_TOKEN='testing'
-   export AWS_SESSION_TOKEN='testing'
-   export AWS_DEFAULT_REGION='us-east-1'
+    export AWS_ACCESS_KEY_ID='testing'
+    export AWS_SECRET_ACCESS_KEY='testing'
+    export AWS_SECURITY_TOKEN='testing'
+    export AWS_SESSION_TOKEN='testing'
+    export AWS_DEFAULT_REGION='us-east-1'
 
 @mock_dynamodb
 def test_lambda_handler_existing_entries(aws_credentials):
