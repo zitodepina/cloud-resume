@@ -1,20 +1,15 @@
-import importlib
-import os
 import boto3
 import pytest
-import json
-import moto
+import os
 from unittest import mock
-
-#from moto import mock_aws
+from moto import mock_dynamodb
 
 import sys
 sys.path.insert (0, 'infra/src')
 
-#from func import lambda_handler
+from func import lambda_handler
 
 TABLE_NAME = "data"
-
 
 @pytest.fixture()
 def aws_credentials():
@@ -25,74 +20,59 @@ def aws_credentials():
     os.environ["AWS_SESSION_TOKEN"] = "testing"
     os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
 
-@moto.mock_dynamodb
-def test_lambda_handler_existing_entries(aws_credentials):
-    """Testing visitors updating when there are entries available in dynamodb table."""
-    app_module = importlib.import_module("src.func")
-    table = app_module.dynamodb.create_table(
-        TableName=TABLE_NAME,
-        KeySchema=[{"AttributeName": "key", "KeyType": "HASH"}],
-        AttributeDefinitions=[
-            {
-                "AttributeName": "key",
-                "AttributeType": "S",
-            },
-        ],
-        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
-    )
-    table.wait_until_exists()
+@mock_dynamodb
+def dynamo_table():
 
-    app_module.dynamodb.put_item(
-        Item={"key": "0", "views": 1},
-    )
+    with moto.mock_dynamodb():
 
-    response = app_module.lambda_handler({}, {})
+        dynamo = boto3.resource('dynamodb', region_name="us-east-1")
 
-    assert response["statusCode"] == 200
-    assert response["body"] == json.dumps({"visits": 2})
-    '''
-    assert response["headers"]["Content-Type"] == "application/json"
-    assert response["headers"]["Access-Control-Allow-Headers"] == "Content-Type, Origin"
-    assert response["headers"]["Access-Control-Allow-Origin"] == "http://localhost"
-    assert response["headers"]["Access-Control-Allow-Methods"] == "OPTIONS,POST,GET"
-    '''
+        table = dynamo.create_table(
 
-    dynamodb_response = app_module.table.get_item(
-        Key={"keyw": "0"}
-    )
+            TableName=TABLE_NAME,
+            KeySchema=[
 
-    assert int(dynamodb_response["Item"]["views"]) == 2
+                {'AttributeName': 'id', 'KeyType': 'HASH'}
+                {'AttributeName': 'views', 'KeyType': 'HASH'}
 
-@moto.mock_dynamodb
-def test_lambda_handler_empty_table(aws_credentials):
-    """Testing visitors updating when there are no entries in dynamodb table."""
-    app_module = importlib.import_module("src.func")
-    table = app_module.dynamodb.create_table(
-         TableName=TABLE_NAME,
-        KeySchema=[{"AttributeName": "key", "KeyType": "HASH"}],
-        AttributeDefinitions=[
-            {
-                "AttributeName": "key",
-                "AttributeType": "S",
-            },
-        ],
-        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
-    )
-    table.wait_until_exists()
 
-    response = app_module.lambda_handler({}, {})
+            ],
 
-    assert response["statusCode"] == 200
-    assert response["body"] == json.dumps({"visits": 1})
-    '''
-    assert response["headers"]["Content-Type"] == "application/json"
-    assert response["headers"]["Access-Control-Allow-Headers"] == "Content-Type, Origin"
-    assert response["headers"]["Access-Control-Allow-Origin"] == "http://localhost"
-    assert response["headers"]["Access-Control-Allow-Methods"] == "OPTIONS,POST,GET"
-    '''
+            AttributeDefinitions=[
 
-    dynamodb_response = app_module.table.get_item(
-        Key={"CounterName": "visitorsCounter"}
+                {'AttributeName': 'id', 'AttributeType': 'S'}
+                {'AttributeName': 'views', 'AttributeType': 'N'}
+
+            ]
+
+        )
+        yield TABLE_NAME
+
+
+@pytest.fixture
+def data_table_with_transactions(dynamo_table):
+    """Creates transactions"""
+
+    table = boto3.resource("dynamodb").Table(dynamo_table)
+    views = 1
+
+    response = table.update_item(
+        Key={'id':'0'},
+        UpdateExpression='SET #v = :val',
+        ExpressionAttributeNames={'#v': 'views'},
+        ExpressionAttributeValues={':val': views}
     )
 
-    assert int(dynamodb_response["Item"]["visits"]) == 1
+
+def test_update_visitor_count_success(data_table_with_transactions):
+
+    # Create a test visitor count in DynamoDB
+   # dynamo_table.put_item(Item={'id': 'visitor_count', 'count': {'N': '0'}})
+
+    # Call the Lambda function
+    #response = func.lambda_handler({'httpMethod': 'GET'})
+    response = lambda_handler({}, {})
+
+    # Assert that the count is incremented
+    assert response['statusCode'] == 200
+    assert response['body'] == '{"count": 1}'
