@@ -77,7 +77,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
     assert response["headers"]["Access-Control-Allow-Methods"] == "OPTIONS,POST,GET"
 
     response = table.get_item(
-        Key={"key": "0"}
+        Key={"id": "0"}
     )
     assert int(response["Item"]["views"]) == 2
 
