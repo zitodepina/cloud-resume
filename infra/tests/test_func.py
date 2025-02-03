@@ -63,13 +63,14 @@ def dynamo_table():
         'id': '0',
         'views': '1'
         }
-        table.put_item(Item=item)
         
-        response = lambda_handler({}, {})
+    table.put_item(Item=item)
+        
+    response = lambda_handler({}, {})
 
-        # Assert that the count is incremented
-        assert response['statusCode'] == 200
-        assert response['body'] == '{"count": 1}'
+    # Assert that the count is incremented
+    assert response['statusCode'] == 200
+    assert response['body'] == '{"count": 1}'
 
 '''
 @pytest.fixture
