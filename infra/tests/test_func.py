@@ -55,10 +55,10 @@ def dynamo_table():
             ],
             ProvisionedThroughput={
             'ReadCapacityUnits': 5,
-            'WriteCapacityUnits': 5
+            'WriteCapacityUnits': 5,
             }
         )
-        
+
         table.wait_until_exists()
        # Add some items to the table
         item = {
