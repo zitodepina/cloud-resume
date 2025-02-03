@@ -58,8 +58,20 @@ def dynamo_table():
             'WriteCapacityUnits': 5
             }
         )
-        yield TABLE_NAME
+        
+        table.wait_until_exists()
+       # Add some items to the table
+        item = {
+            'id': '0',
+            'views': '1'
+        }
+        table.put_item(Item=item)
+        
+        response = lambda_handler({}, {})
 
+        # Assert that the count is incremented
+        assert response['statusCode'] == 200
+        assert response['body'] == '{"count": 1}'
 
 
 @pytest.fixture
