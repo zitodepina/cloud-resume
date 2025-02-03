@@ -1,8 +1,9 @@
 import os
 
 import boto3
-import moto
 import pytest
+
+from moto import mock_dynamodb
 
 import sys
 sys.path.insert (0, 'infra/src')
@@ -19,7 +20,7 @@ def aws_credentials():
     os.environ["AWS_SECURITY_TOKEN"] = "testing"
     os.environ["AWS_SESSION_TOKEN"] = "testing"
     os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
-
+'''
 @pytest.fixture
 def dynamo_table():
     with moto.mock_dynamodb():
@@ -38,6 +39,28 @@ def dynamo_table():
         )
 
         yield TABLE_NAME
+'''
+@mock_dynamodb
+def dynamo_table():
+    
+    dynamo = boto3.resource('dynamodb', region_name="us-east-1")
+    
+    table = dynamo.create_table(
+        AttributeDefinitions=[
+            {"AttributeName": "id", "AttributeType": "S"},
+            ],
+            TableName=TABLE_NAME,
+            KeySchema=[
+                {"AttributeName": "id", "KeyType": "HASH"},
+            ],
+            ProvisionedThroughput={
+            'ReadCapacityUnits': 5,
+            'WriteCapacityUnits': 5
+        }
+        )
+
+        yield TABLE_NAME
+
 
 
 @pytest.fixture
