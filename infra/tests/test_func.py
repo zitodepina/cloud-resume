@@ -58,10 +58,10 @@ def dynamo_table():
         ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
     )
     table.wait_until_exists()
-       # Add some items to the table
-        item = {
-            'id': '0',
-            'views': '1'
+    # Add some items to the table
+    item = {
+        'id': '0',
+        'views': '1'
         }
         table.put_item(Item=item)
         
