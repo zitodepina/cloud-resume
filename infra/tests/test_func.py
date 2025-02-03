@@ -20,6 +20,7 @@ def aws_credentials():
     os.environ["AWS_SECURITY_TOKEN"] = "testing"
     os.environ["AWS_SESSION_TOKEN"] = "testing"
     os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+
 '''
 @pytest.fixture
 def dynamo_table():
@@ -47,10 +48,23 @@ def dynamo_table():
     
     table = dynamo.create_table(
         TableName=TABLE_NAME,
-        KeySchema=[{"AttributeName": "id", "KeyType": "HASH"}],
-        AttributeDefinitions=[{"AttributeName": "id", "AttributeType": "S"}],
-        ProvisionedThroughput={'ReadCapacityUnits': 5,'WriteCapacityUnits': 5},
-        )
+        KeySchema=[
+            {
+                "AttributeName": "id", 
+                "KeyType": "HASH"
+            },
+        ],
+        AttributeDefinitions=[
+            {
+                "AttributeName": "id", 
+                "AttributeType": "S"
+            },
+        ],
+        ProvisionedThroughput={
+            'ReadCapacityUnits': 5,
+            'WriteCapacityUnits': 5
+        }
+    )
         
         table.wait_until_exists()
        # Add some items to the table
