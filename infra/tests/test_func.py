@@ -58,8 +58,6 @@ def dynamo_table():
             'WriteCapacityUnits': 5,
             }
         )
-
-        table.wait_until_exists()
        # Add some items to the table
         item = {
             'id': '0',
