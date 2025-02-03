@@ -48,25 +48,16 @@ def dynamo_table():
     
     table = dynamo.create_table(
         TableName=TABLE_NAME,
-        KeySchema=[
-            {
-                "AttributeName": "id", 
-                "KeyType": "HASH"
-            },
-        ],
+        KeySchema=[{"AttributeName": "id", "KeyType": "HASH"}],
         AttributeDefinitions=[
             {
-                "AttributeName": "id", 
-                "AttributeType": "S"
+                "AttributeName": "id",
+                "AttributeType": "S",
             },
         ],
-        ProvisionedThroughput={
-            'ReadCapacityUnits': 5,
-            'WriteCapacityUnits': 5
-        }
+        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
     )
-        
-        table.wait_until_exists()
+    table.wait_until_exists()
        # Add some items to the table
         item = {
             'id': '0',
