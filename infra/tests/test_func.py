@@ -3,7 +3,7 @@ import os
 import boto3
 import pytest
 
-from moto import mock_dynamodb2
+from moto import mock_aws
 
 import sys
 sys.path.insert (0, 'infra/src')
@@ -41,7 +41,7 @@ def dynamo_table():
 
         yield TABLE_NAME
 '''
-@mock_dynamodb2
+@mock_aws
 def dynamo_table():
     
     dynamo = boto3.resource('dynamodb', region_name="us-east-1")
