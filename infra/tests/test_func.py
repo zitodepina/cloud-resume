@@ -56,9 +56,8 @@ def dynamo_table():
             ProvisionedThroughput={
             'ReadCapacityUnits': 5,
             'WriteCapacityUnits': 5
-        }
+            }
         )
-
         yield TABLE_NAME
 
 
