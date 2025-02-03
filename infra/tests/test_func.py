@@ -42,7 +42,7 @@ def dynamo_table():
         yield TABLE_NAME
 '''
 @mock_aws
-def dynamo_table():
+def test_lambda_handler_existing_entries(aws_credentials):
     
     dynamo = boto3.resource('dynamodb', region_name="us-east-1")
     
@@ -69,8 +69,23 @@ def dynamo_table():
     response = lambda_handler({}, {})
 
     # Assert that the count is incremented
-    assert response['statusCode'] == 200
-    assert response['body'] == '{"count": 1}'
+    assert response["statusCode"] == 200
+    assert response["body"] == json.dumps({"visits": 2})
+    assert response["headers"]["Content-Type"] == "application/json"
+    assert response["headers"]["Access-Control-Allow-Headers"] == "Content-Type, Origin"
+    assert response["headers"]["Access-Control-Allow-Origin"] == "http://localhost"
+    assert response["headers"]["Access-Control-Allow-Methods"] == "OPTIONS,POST,GET"
+
+    response = table.get_item(
+        Key={"key": "0"}
+    )
+    assert int(response["Item"]["views"]) == 2
+
+    
+
+
+
+
 
 '''
 @pytest.fixture
