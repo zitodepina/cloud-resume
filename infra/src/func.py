@@ -10,7 +10,7 @@ TABLE_NAME = 'cloud-resume'
 def get_table_resource(TABLE_NAME):
     logging.info("Getting Table Ressource...")
     dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
-    return dynamodb.Table(table_name)
+    return dynamodb.Table(TABLE_NAME)
 
 
 def get_views(table):
