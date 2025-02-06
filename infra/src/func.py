@@ -5,9 +5,9 @@ import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-table_name = 'cloud-resume'
+TABLE_NAME = 'cloud-resume'
 
-def get_table_resource(table_name):
+def get_table_resource(TABLE_NAME):
     logging.info("Getting Table Ressource...")
     dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
     return dynamodb.Table(table_name)
@@ -29,8 +29,8 @@ def update_views(views, table):
         ExpressionAttributeValues={':val': views}
     )
 
-def lambda_handler(table_name, context):
-    table = get_table_resource(table_name)
+def lambda_handler(TABLE_NAME, context):
+    table = get_table_resource(TABLE_NAME)
     views = get_views(table)
     views = int(views) + 1
     update_views(views, table)
