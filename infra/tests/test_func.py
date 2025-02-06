@@ -50,7 +50,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
     #response = get_views(table)
     #assert int(response) == 1
         
-   response = lambda_handler(TABLE_NAME, {})
+    response = lambda_handler(TABLE_NAME, {})
    # Assert that the count is incremented
     assert response["statusCode"] == 200
     assert response["body"] == json.dumps({"visits": 2})
