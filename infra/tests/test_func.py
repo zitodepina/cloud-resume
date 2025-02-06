@@ -21,26 +21,6 @@ def aws_credentials():
     os.environ["AWS_SESSION_TOKEN"] = "testing"
     os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
 
-'''
-@pytest.fixture
-def dynamo_table():
-    with moto.mock_dynamodb():
-        dynamo = boto3.resource('dynamodb', region_name="us-east-1")
-        table = dynamo.create_table(
-            AttributeDefinitions=[
-                {"AttributeName": "id", "AttributeType": "S"},
-                {"AttributeName": "views", "AttributeType": "N"}
-            ],
-            TableName=TABLE_NAME,
-            KeySchema=[
-                {"AttributeName": "id", "KeyType": "HASH"},
-                {"AttributeName": "views", "KeyType": "RANGE"}
-            ],
-            BillingMode="PAY_PER_REQUEST"
-        )
-
-        yield TABLE_NAME
-'''
 @mock_aws
 def test_lambda_handler_existing_entries(aws_credentials):
     """Testing visitors updating when there are entries available in dynamodb table."""
@@ -66,7 +46,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
         
     table.put_item(Item=item)
         
-    response = lambda_handler(table, {})
+    response = lambda_handler({}, {})
 
     # Assert that the count is incremented
     assert response["statusCode"] == 200
