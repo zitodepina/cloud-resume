@@ -10,7 +10,7 @@ sys.path.insert (0, 'infra/src')
 
 from func import lambda_handler
 
-TABLE_NAME = "data"
+TABLE_NAME = "test_counter"
 
 @pytest.fixture()
 def aws_credentials():
@@ -55,7 +55,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
                 "AttributeType": "S",
             },
         ],
-        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
+        ProvisionedThroughput={"ReadCapacityUnits": 5, "WriteCapacityUnits": 5},
     )
     table.wait_until_exists()
     # Add some items to the table
@@ -66,7 +66,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
         
     table.put_item(Item=item)
         
-    response = lambda_handler({}, {})
+    response = lambda_handler(table, {})
 
     # Assert that the count is incremented
     assert response["statusCode"] == 200
@@ -76,12 +76,12 @@ def test_lambda_handler_existing_entries(aws_credentials):
     assert response["headers"]["Access-Control-Allow-Origin"] == "http://localhost"
     assert response["headers"]["Access-Control-Allow-Methods"] == "OPTIONS,POST,GET"
 
-'''
+
     response = table.get_item(
         Key={"id": "0"}
     )
     assert int(response["Item"]["views"]) == 2
-    '''
+    
 
     
 
