@@ -32,6 +32,6 @@ def update_views(views, table):
 def lambda_handler(table_name, context):
     table = get_table_resource(table_name)
     views = get_views(table)
-    views = views + 1
+    views = int(views) + 1
     update_views(views, table)
     return views
