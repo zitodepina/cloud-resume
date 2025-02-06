@@ -46,11 +46,19 @@ def test_lambda_handler_existing_entries(aws_credentials):
         }
         
     table.put_item(Item=item)
-        
-    #response = lambda_handler({}, {})
 
-    response = get_views(table)
-    assert int(response) == 1
+    #response = get_views(table)
+    #assert int(response) == 1
+        
+   response = lambda_handler(TABLE_NAME, {})
+   # Assert that the count is incremented
+    assert response["statusCode"] == 200
+    assert response["body"] == json.dumps({"visits": 2})
+    assert response["headers"]["Content-Type"] == "application/json"
+    assert response["headers"]["Access-Control-Allow-Headers"] == "Content-Type, Origin"
+    assert response["headers"]["Access-Control-Allow-Origin"] == "http://localhost"
+    assert response["headers"]["Access-Control-Allow-Methods"] == "OPTIONS,POST,GET"
+  
 
 '''
     # Assert that the count is incremented
