@@ -9,6 +9,7 @@ import sys
 sys.path.insert (0, 'infra/src')
 
 from func import lambda_handler
+from func import get_views
 
 TABLE_NAME = "test_counter"
 
