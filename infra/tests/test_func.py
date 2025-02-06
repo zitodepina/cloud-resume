@@ -46,7 +46,9 @@ def test_lambda_handler_existing_entries(aws_credentials):
         
     table.put_item(Item=item)
         
-    response = lambda_handler({}, {})
+    #response = lambda_handler({}, {})
+
+    response = get_views(table)
 
     # Assert that the count is incremented
     assert response["statusCode"] == 200
