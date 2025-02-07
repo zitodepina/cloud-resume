@@ -29,7 +29,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
     dynamo = boto3.resource('dynamodb', region_name="us-east-1")
     
     table = dynamo.create_table(
-        TableName=TABLE_NAME,
+        TableName=os.getenv("DYNAMODB_TABLE"),
         KeySchema=[{"AttributeName": "id", "KeyType": "HASH"}],
         AttributeDefinitions=[
             {
