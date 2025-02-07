@@ -21,6 +21,7 @@ def aws_credentials():
     os.environ["AWS_SECURITY_TOKEN"] = "testing"
     os.environ["AWS_SESSION_TOKEN"] = "testing"
     os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+    os.environ["DYNAMODB_TABLE"] = "test-dynamodb"
 
 @mock_aws
 def test_lambda_handler_existing_entries(aws_credentials):
@@ -50,7 +51,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
     #response = get_views(table)
     #assert int(response) == 1
         
-    response = lambda_handler(TABLE_NAME, {})
+    response = lambda_handler({}, {})
     assert int(response) == 2
 
 
