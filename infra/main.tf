@@ -177,7 +177,6 @@ resource "aws_lambda_permission" "api_gateway" {
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.resume_project_gateway.execution_arn}/*/*"
 }
-
 /*
 # DEPLOYMENTS
 resource "aws_api_gateway_deployment" "resume_project_gateway_deployment" {
