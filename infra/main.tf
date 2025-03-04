@@ -1,3 +1,4 @@
+# lambda function creation
 resource "aws_lambda_function" "myfunc" {
   filename         = data.archive_file.zip_the_python_code.output_path
   source_code_hash = data.archive_file.zip_the_python_code.output_base64sha256
@@ -7,8 +8,9 @@ resource "aws_lambda_function" "myfunc" {
   runtime          = "python3.12"
 }
 
+# create lambda iam role
 resource "aws_iam_role" "iam_for_lambda" {
-  name = "iam_for_lambda"
+name = "iam_for_lambda"
 
 assume_role_policy = <<EOF
 {
@@ -26,7 +28,7 @@ assume_role_policy = <<EOF
 }
 EOF
 }
-
+# create lambda iam role policy
 resource "aws_iam_policy" "iam_policy_for_resume_project" {
 
   name        = "aws_iam_policy_for_terraform_resume_project_policy"
@@ -55,13 +57,14 @@ resource "aws_iam_policy" "iam_policy_for_resume_project" {
       ]
   })
 }
-
+# iam role policy attachment to lambda role
 resource "aws_iam_role_policy_attachment" "attach_iam_policy_to_iam_role" {
   role = aws_iam_role.iam_for_lambda.name
   policy_arn = aws_iam_policy.iam_policy_for_resume_project.arn
   
 }
 
+# Archive the lambda function python code 
 data "archive_file" "zip_the_python_code" {
   type        = "zip"
   source_file = "${path.module}/src/func.py"
@@ -81,3 +84,108 @@ resource "aws_lambda_function_url" "url1" {
     max_age           = 86400
   }
 }
+
+# Create an S3 bucket
+resource "aws_s3_bucket" "example_bucket" {
+  bucket = "cloud-resume-adp" 
+  
+  tags = {
+    Name  = "My resume bucket"
+  }
+}
+
+# DynamoDB Table
+resource "aws_dynamodb_table" "views_count_ddb" {
+  name         = "VisitorsTableADP"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "id"
+
+  attribute {
+    name = "id"
+    type = "S"
+  }
+
+  attribute {
+    name = "views"
+    type = "N"
+  }
+
+  global_secondary_index {
+    name            = "views_count"
+    hash_key        = "views"
+    projection_type = "ALL"
+    read_capacity   = 1
+    write_capacity  = 1
+  }
+
+  tags = {
+    Name = "Cloud Resume Challenge"
+  }
+}
+
+# DynamoDB Table Item
+resource "aws_dynamodb_table_item" "views_count_ddb" {
+  table_name = aws_dynamodb_table.views_count_ddb.name
+  hash_key   = aws_dynamodb_table.views_count_ddb.hash_key
+
+  item = <<ITEM
+  {
+    "id": {"S": "views_count"},
+    "views": {"N": "1"}
+  }
+  ITEM
+}
+
+#API gateway entry
+resource "aws_api_gateway_rest_api" "resume_project_gateway" {
+  name = "resumeprojectgateway"
+  description = "Proxy to handle requests to our API"
+  
+}
+
+# RESOURCES
+resource "aws_api_gateway_resource" "views_gateway_resource" {
+  rest_api_id = aws_api_gateway_rest_api.resume_project_gateway.id
+  parent_id   = aws_api_gateway_rest_api.resume_project_gateway.root_resource_id
+  path_part   = "visitor"
+}
+
+# METHODS
+
+resource "aws_api_gateway_method" "views_gateway_method" {
+  rest_api_id   = aws_api_gateway_rest_api.resume_project_gateway.id
+  resource_id   = aws_api_gateway_resource.views_gateway_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+# INTEGRATIONS
+
+resource "aws_api_gateway_integration" "integration" {
+  rest_api_id = aws_api_gateway_rest_api.resume_project_gateway.id
+  resource_id = aws_api_gateway_resource.views_gateway_resource.id
+  http_method = aws_api_gateway_method.views_gateway_method.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.myfunc.invoke_arn
+}
+
+resource "aws_lambda_permission" "api_gateway" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.myfunc.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.resume_project_gateway.execution_arn}/*/*"
+}
+
+/*
+# DEPLOYMENTS
+resource "aws_api_gateway_deployment" "resume_project_gateway_deployment" {
+  depends_on = [
+    aws_api_gateway_integration.lambda
+  ]
+
+  rest_api_id = aws_api_gateway_rest_api.resume_project_gateway.id
+  stage_name  = "prod"
+}
+*/

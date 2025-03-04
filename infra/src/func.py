@@ -6,23 +6,15 @@ import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-#dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
-#table = dynamodb.Table(os.getenv("DYNAMODB_TABLE"))
+dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
+table = dynamodb.Table('cloud-resume')
 
-def get_table_resource():
-    logging.info("Getting Table Ressource...")
-    dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
-    return dynamodb.Table(os.getenv("DYNAMODB_TABLE"))
-
-
-def get_views(table):
+def get_views():
     logging.info("Getting views...")
-    response = table.get_item(Key={
-        'id':'0'
-    })
+    response = table.get_item(Key={'id':'0'})
     return response['Item']['views']
 
-def update_views(views, table):
+def update_views(views):
     logging.info("Updating views...")
     response = table.update_item(
         Key={'id':'0'},
@@ -32,8 +24,15 @@ def update_views(views, table):
     )
 
 def lambda_handler(event, context):
-    table = get_table_resource()
-    views = get_views(table)
+    views = get_views()
     views = int(views) + 1
-    update_views(views, table)
-    return views
+    update_views(views)
+    
+    return {
+        'isBase64Encoded': False,
+        'statusCode': 200,
+        'headers': 
+        {"Content-Type": "application/json",},
+        'body': get_views()
+        }
+   
