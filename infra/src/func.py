@@ -10,6 +10,7 @@ dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
 #table = dynamodb.Table('cloud-resume')
 table = dynamodb.Table(os.getenv("DYNAMODB_TABLE"))
 
+#get views from db
 def get_views():
     logging.info("Getting views...")
     response = table.get_item(Key={'id':'0'})
