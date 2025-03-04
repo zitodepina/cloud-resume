@@ -7,8 +7,8 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
-#table = dynamodb.Table('cloud-resume')
-table = dynamodb.Table(os.getenv("DYNAMODB_TABLE"))
+table = dynamodb.Table('cloud-resume')
+#table = dynamodb.Table(os.getenv("DYNAMODB_TABLE"))
 
 #get views from db
 def get_views():
