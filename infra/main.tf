@@ -137,7 +137,6 @@ resource "aws_dynamodb_table_item" "views_count_ddb" {
   ITEM
 }
 
-
 #API gateway entry
 resource "aws_api_gateway_rest_api" "resume_project_gateway" {
   name = "resumeprojectgateway"
@@ -179,14 +178,34 @@ resource "aws_lambda_permission" "api_gateway" {
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.resume_project_gateway.execution_arn}/*/*"
 }
-/*
+
+
 # DEPLOYMENTS
 resource "aws_api_gateway_deployment" "resume_project_gateway_deployment" {
   depends_on = [
     aws_api_gateway_integration.lambda
   ]
-
   rest_api_id = aws_api_gateway_rest_api.resume_project_gateway.id
-  stage_name  = "prod"
 }
-*/
+
+# STAGE
+resource "aws_api_gateway_stage" "resume_project_gateway_stage" {
+  deployment_id = aws_api_gateway_deployment.resume_project_gateway_deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.resume_project_gateway.id
+  stage_name    = "prod"
+}
+
+resource "aws_api_gateway_method_settings" "resume_project_gateway_method_settings" {
+  rest_api_id = aws_api_gateway_rest_api.resume_project_gateway.id
+  stage_name  = aws_api_gateway_stage.resume_project_gateway_stage.stage_name
+  method_path = "*/*"
+
+  settings {
+    metrics_enabled = true
+    logging_level   = "INFO"
+  }
+}
+
+
+
+
