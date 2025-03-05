@@ -94,6 +94,7 @@ resource "aws_s3_bucket" "example_bucket" {
   }
 }
 
+
 # DynamoDB Table
 resource "aws_dynamodb_table" "views_count_ddb" {
   name         = "VisitorsTableADP"
@@ -135,6 +136,7 @@ resource "aws_dynamodb_table_item" "views_count_ddb" {
   }
   ITEM
 }
+
 
 #API gateway entry
 resource "aws_api_gateway_rest_api" "resume_project_gateway" {
