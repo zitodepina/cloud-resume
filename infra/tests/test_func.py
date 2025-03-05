@@ -49,4 +49,8 @@ def test_lambda_handler_existing_entries(aws_credentials):
     table.put_item(Item=item)
         
     response = lambda_handler({}, {})
-    assert int(response) == 2
+
+    assert response["statusCode"] == 200
+    assert response["headers"]["Content-Type"] == "application/json"
+    assert response["body"] == 2
+    #assert int(response) == 2
