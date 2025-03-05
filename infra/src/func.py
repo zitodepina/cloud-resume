@@ -12,11 +12,10 @@ def get_table_resource():
     return dynamodb.Table(os.getenv("DYNAMODB_TABLE"))
 
 
+#get views from db
 def get_views(table):
     logging.info("Getting views...")
-    response = table.get_item(Key={
-        'id':'0'
-    })
+    response = table.get_item(Key={'id':'0'})
     return response['Item']['views']
 
 def update_views(views, table):
@@ -33,5 +32,11 @@ def lambda_handler(event, context):
     views = get_views(table)
     views = int(views) + 1
     update_views(views, table)
-    return views
-   
+    
+    return {
+        'isBase64Encoded': False,
+        'statusCode': 200,
+        'headers': 
+        {"Content-Type": "application/json",},
+        'body': get_views(table)
+        }
