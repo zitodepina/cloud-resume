@@ -85,6 +85,7 @@ resource "aws_lambda_function_url" "url1" {
   }
 }
 
+/*
 # Create an S3 bucket
 resource "aws_s3_bucket" "example_bucket" {
   bucket = "cloud-resume-adp" 
@@ -93,7 +94,7 @@ resource "aws_s3_bucket" "example_bucket" {
     Name  = "My resume bucket"
   }
 }
-
+*/
 
 # DynamoDB Table
 resource "aws_dynamodb_table" "views_count_ddb" {
@@ -183,7 +184,7 @@ resource "aws_lambda_permission" "api_gateway" {
 # DEPLOYMENTS
 resource "aws_api_gateway_deployment" "resume_project_gateway_deployment" {
   depends_on = [
-    aws_api_gateway_integration.lambda
+    aws_api_gateway_integration.integration
   ]
   rest_api_id = aws_api_gateway_rest_api.resume_project_gateway.id
 }
@@ -199,10 +200,9 @@ resource "aws_api_gateway_method_settings" "resume_project_gateway_method_settin
   rest_api_id = aws_api_gateway_rest_api.resume_project_gateway.id
   stage_name  = aws_api_gateway_stage.resume_project_gateway_stage.stage_name
   method_path = "*/*"
-
+  
   settings {
     metrics_enabled = true
-    logging_level   = "INFO"
   }
 }
 
