@@ -2,7 +2,7 @@ const counter = document.querySelector(".counter-number");
 async function updateCounter() {
     try{
         let response = await fetch(
-            "https://llljmtwhn5.execute-api.us-east-1.amazonaws.com/prod/visitor", {
+            "https://llljmtwhn5.execute-api.us-east-1.amazonaws.com/visitor", {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
