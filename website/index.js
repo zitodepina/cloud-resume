@@ -1,8 +1,7 @@
-
+const counter = document.querySelector(".counter-number");
 async function updateCounter() {
-
-
-    document.getElementById("visitors").innerHTML = `👀 Views: 3333333333333333333`;
+    
+    counter.innerHTML = `👀 Views: 22222222222222222222222222`;
 
     /*try {
         let response = await fetch('https://84qhfs9mr3.execute-api.us-east-1.amazonaws.com/prod/visitor', {
@@ -42,8 +41,8 @@ async function updateCounter() {
         console.error('Error in updateCounter:', error);
       }
 }
-*/
 updateCounter();
+*/
 
 /*
 
