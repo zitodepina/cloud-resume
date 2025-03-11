@@ -1,9 +1,7 @@
-async function get_visitors() {
-    // call post api request function
-    //await post_visitor();
+async function updateCounter() {
     try {
         let response = await fetch('https://84qhfs9mr3.execute-api.us-east-1.amazonaws.com/prod/visitor', {
-            method: 'GET',
+            /*method: 'GET',*/
         });
         let data = await response.json()
         document.getElementById("visitors").innerHTML = "111111111";
@@ -15,7 +13,7 @@ async function get_visitors() {
 }
 
 
-get_visitors();
+updateCounter();
 
 /*
 const counter = document.querySelector(".counter-number");
