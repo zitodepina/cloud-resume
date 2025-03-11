@@ -1,19 +1,17 @@
 const counter = document.querySelector(".counter-number");
 async function updateCounter() {
     
-    counter.innerHTML = `👀 Views: 22222222222222222222222222`;
-
-    /*try {
+    try {
         let response = await fetch('https://84qhfs9mr3.execute-api.us-east-1.amazonaws.com/prod/visitor', {
             method: 'GET',
         });
         let data = await response.json()
-        document.getElementById("visitors").innerHTML = `👀 Views: ${data}`;
+        document.getElementById("visitors").innerHTML = `👀 Views: ${data.views}`;
         console.log(data);
         return data;
     } catch (err) {
         console.error(err);
-    }*/
+    }
 }
 
 
