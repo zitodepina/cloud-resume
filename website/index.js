@@ -12,7 +12,7 @@ async function updateCounter() {
              throw new Error(`HTTP error! Status: ${response.status}`);
         }
         let visitors = await response.json();
-        counter.innerHTML = `👀 Views: ${visitors['views']}`;
+        counter.innerHTML = `👀 Views: 10`;
         } catch (error) {
         console.error('Error in updateCounter:', error);
       }
