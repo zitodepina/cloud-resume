@@ -1,6 +1,10 @@
 
 async function updateCounter() {
-    try {
+
+
+    document.getElementById("visitors").innerHTML = `👀 Views: 3333333333333333333`;
+
+    /*try {
         let response = await fetch('https://84qhfs9mr3.execute-api.us-east-1.amazonaws.com/prod/visitor', {
             method: 'GET',
         });
@@ -10,7 +14,7 @@ async function updateCounter() {
         return data;
     } catch (err) {
         console.error(err);
-    }
+    }*/
 }
 
 
