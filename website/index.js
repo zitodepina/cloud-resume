@@ -13,8 +13,6 @@ async function updateCounter() {
         console.error(err);
     }
 }
-
-
 updateCounter();
 
 
