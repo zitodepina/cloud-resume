@@ -6,7 +6,7 @@ async function updateCounter() {
             method: 'GET',
         });
         let data = await response.json()
-        document.getElementById("visitors").innerHTML = `👀 Views: ${data}`;
+        document.getElementById("visitors").innerHTML = `👀 Views: ${data['views']}`;
         console.log(data);
         return data;
     } catch (err) {
