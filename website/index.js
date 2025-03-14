@@ -9,7 +9,8 @@ async function updateCounter() {
               },
         });
         let data = await response.json();
-        document.getElementById("visitors").innerHTML = `👀 Views: ${data.views}`;
+        counter.innerHTML = `👀 Views: ` + data;
+        //document.getElementById("visitors").innerHTML = `👀 Views: ${data.views}`;
         console.log(data);
         return data;
     } catch (err) {
