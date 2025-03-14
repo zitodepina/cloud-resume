@@ -4,9 +4,12 @@ async function updateCounter() {
     try {
         let response = await fetch('https://84qhfs9mr3.execute-api.us-east-1.amazonaws.com/prod/visitor', {
             method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+              },
         });
         let data = await response.json();
-        document.getElementById("visitors").innerHTML = `👀 Views: ${data}`;
+        document.getElementById("visitors").innerHTML = `👀 Views: ${data.views}`;
         console.log(data);
         return data;
     } catch (err) {
