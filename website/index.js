@@ -11,10 +11,10 @@ async function updateCounter() {
         let data = await response.text();
         counter.innerHTML = `👀 Views: ` + data;
         //document.getElementById("visitors").innerHTML = `👀 Views: ${data.views}`;
-        console.log(data);
+        console.log("Data fetched:", data);
         return data;
     } catch (err) {
-        console.error(err);
+        console.error("Error fetching data:", err);
     }
 }
 
