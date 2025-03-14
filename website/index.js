@@ -5,7 +5,7 @@ async function updateCounter() {
         let response = await fetch('https://84qhfs9mr3.execute-api.us-east-1.amazonaws.com/prod/visitor', {
             method: 'GET',
         });
-        let data = await response.text()
+        let data = await response.json();
         document.getElementById("visitors").innerHTML = `👀 Views: ${data}`;
         console.log(data);
         return data;
@@ -13,6 +13,8 @@ async function updateCounter() {
         console.error(err);
     }
 }
+
+
 updateCounter();
 
 
