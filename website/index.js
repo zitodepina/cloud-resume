@@ -8,7 +8,7 @@ async function updateCounter() {
                 "Content-Type": "application/json",
               },
         });
-        let data = await response.json();
+        let data = await response.text();
         counter.innerHTML = `👀 Views: ` + data;
         //document.getElementById("visitors").innerHTML = `👀 Views: ${data.views}`;
         console.log(data);
