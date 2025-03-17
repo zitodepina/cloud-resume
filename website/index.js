@@ -6,7 +6,6 @@ async function updateCounter() {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                'Access-Control-Allow-Origin' : '*'
               },
         });
         let data = await response.text();
