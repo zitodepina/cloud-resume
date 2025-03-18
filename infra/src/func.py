@@ -38,10 +38,8 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'headers': {
             "Content-Type": "application/json",
-            'Access-Control-Allow-Origin' : '*',
-            'Access-Control-Allow-Credentials' : 'true',
-            'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
-            'Access-Control-Allow-Headers' : 'Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control'
+            "Access-Control-Allow-Origin": '*',
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
              },
         'body': get_views(table)
         }
