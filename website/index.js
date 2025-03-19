@@ -16,4 +16,4 @@ async function updateCounter() {
         console.error("Error fetching data:", err);
     }
 }
-updateCounter();
+updateCounter()
