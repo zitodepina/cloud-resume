@@ -8,20 +8,20 @@ logger.setLevel(logging.INFO)
 
 def get_table_resource():
     logging.info("Getting Table Ressource...")
-    dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
+    dynamodb = boto3.resource('dynamodb', region_name=os.getenv("REGION"))
     return dynamodb.Table(os.getenv("DYNAMODB_TABLE"))
 
 
 #get views from db
 def get_views(table):
     logging.info("Getting views...")
-    response = table.get_item(Key={'id':'0'})
+    response = table.get_item(Key={'id':'views_count'})
     return response['Item']['views']
 
 def update_views(views, table):
     logging.info("Updating views...")
     response = table.update_item(
-        Key={'id':'0'},
+        Key={'id':'views_count'},
         UpdateExpression='SET #v = :val',
         ExpressionAttributeNames={'#v': 'views'},
         ExpressionAttributeValues={':val': views}
