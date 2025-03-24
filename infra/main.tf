@@ -119,14 +119,6 @@ resource "aws_dynamodb_table" "views_count_ddb" {
     type = "N"
   }
 
-  global_secondary_index {
-    name            = "views_count"
-    hash_key        = "views"
-    projection_type = "ALL"
-    read_capacity   = 1
-    write_capacity  = 1
-  }
-
   tags = {
     Name = "Cloud Resume Challenge"
   }
