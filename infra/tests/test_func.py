@@ -42,7 +42,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
     table.wait_until_exists()
     # Add some items to the table
     item = {
-        'id': 'views_count',
+        'id': '0',
         'views': '1'
         }
         

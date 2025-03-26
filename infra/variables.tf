@@ -10,5 +10,12 @@ variable "region" {
 }
 
 #variable for database to use
-variable "database" {}
+variable "database" {
+    default = "aws_cloud-resume"
+}
+
+#variable for user Id
+variable "id" {
+    default = "adp"
+}
 
