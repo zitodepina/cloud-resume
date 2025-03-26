@@ -59,7 +59,7 @@ resource "aws_iam_policy" "iam_policy_for_resume_project" {
           "Action" : [
             "dynamodb:*"
           ],
-          "Resource" : "arn:aws:dynamodb:*:*:table/cloud-resume"
+          "Resource" : "arn:aws:dynamodb:*:*:table/${var.database}"
         },
       ]
   })
