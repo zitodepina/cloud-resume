@@ -15,13 +15,13 @@ def get_table_resource():
 #get views from db
 def get_views(table):
     logging.info("Getting views...")
-    response = table.get_item(Key={'id':'adp'})
+    response = table.get_item(Key={'id':os.getenv("ID")})
     return response['Item']['views']
 
 def update_views(views, table):
     logging.info("Updating views...")
     response = table.update_item(
-        Key={'id':'adp'},
+        Key={'id':os.getenv("ID")},
         UpdateExpression='SET #v = :val',
         ExpressionAttributeNames={'#v': 'views'},
         ExpressionAttributeValues={':val': views}

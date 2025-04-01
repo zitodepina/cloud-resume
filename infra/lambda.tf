@@ -11,7 +11,8 @@ resource "aws_lambda_function" "myfunc" {
     variables = {
       DYNAMODB_TABLE = var.database
       REGION = var.region
-    }
+      ID =  var.id
+      }
   }
 }
 
