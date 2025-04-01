@@ -22,6 +22,7 @@ def aws_credentials():
     os.environ["AWS_SESSION_TOKEN"] = "testing"
     os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
     os.environ["DYNAMODB_TABLE"] = "test-dynamodb"
+    os.environ["ID"] = "adp"
 
 @mock_aws
 def test_lambda_handler_existing_entries(aws_credentials):
@@ -42,7 +43,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
     table.wait_until_exists()
     # Add some items to the table
     item = {
-        'id': 'adp',
+        'id': os.getenv("ID"),
         'views': '1'
         }
         
