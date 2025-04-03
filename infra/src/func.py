@@ -60,6 +60,6 @@ def lambda_handler(event, context):
         'isBase64Encoded': False,
         'statusCode': 200,
         'headers': {'Access-Control-Allow-Origin' : '*'},
-        'body': get_views(table)
+        'body': get_views(table, tableId)
         }
         
