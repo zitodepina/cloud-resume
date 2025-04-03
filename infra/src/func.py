@@ -21,12 +21,12 @@ def get_views(table, tableId):
         return response['Item']['views']
     else:
         logging.info("No Views Counter in DynamoDB Table. Creating...")
-        updateTableItems(table)
+        updateTableItems(table, tableId)
         response = table.get_item(Key={'id':tableId})
         return response['Item']['views']
 
 #Update table Items
-def updateTableItems(table):
+def updateTableItems(table, tableId):
     logging.info("Updating Tabe Items...")
      # Add some items to the table
     item = {
