@@ -46,6 +46,7 @@ def update_views(views, table, tableId):
     )
 
 def lambda_handler(event, context):
+    
     tableId = event['id']
 
     table = get_table_resource()
