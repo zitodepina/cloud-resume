@@ -44,7 +44,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
     # Add some items to the table
     item = {
         'id': os.getenv("ID"),
-        'views': '1'
+        'views': 1
         }
         
     table.put_item(Item=item)
