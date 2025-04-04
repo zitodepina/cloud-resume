@@ -1,7 +1,12 @@
 const counter = document.querySelector(".counter-number");
+
+const idVariable = process.env.TF_VAR_id;
+
+VISITORS_ENDPOINT = "https://upqg49f2a4.execute-api.us-east-1.amazonaws.com/prod/visitor" + '?' + idVariable;
+
 async function updateCounter() {
     try {
-        let response = await fetch('https://upqg49f2a4.execute-api.us-east-1.amazonaws.com/prod/visitor?id=adp', {
+        let response = await fetch(VISITORS_ENDPOINT, {
             method: 'GET',
         });
         let data = await response.text();
