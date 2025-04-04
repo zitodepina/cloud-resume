@@ -4,7 +4,7 @@ const idVariable = process.env.TF_VAR_id;
 console.log(idVariable);
 
 
-VISITORS_ENDPOINT = "https://upqg49f2a4.execute-api.us-east-1.amazonaws.com/prod/visitor" + '?' + idVariable;
+VISITORS_ENDPOINT = "https://upqg49f2a4.execute-api.us-east-1.amazonaws.com/prod/visitor" + '?' + 'id='+idVariable;
 
 async function updateCounter() {
     try {
