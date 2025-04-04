@@ -49,7 +49,7 @@ def test_lambda_handler_existing_entries(aws_credentials):
         
     table.put_item(Item=item)
     
-    event = {'pathParameters': {'id': 'adp'}}
+    event = {'queryStringParameters': {'id': 'adp'}}
         
     response = lambda_handler(event, {})
 
