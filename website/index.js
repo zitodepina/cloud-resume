@@ -1,6 +1,9 @@
 const counter = document.querySelector(".counter-number");
 
-const url_id = window.location.href;
+const url = window.location.href;
+console.log(url);
+const urlParser = new URL(url_id);
+const url_id = urlParser.hostname;
 console.log(url_id);
 
 VISITORS_ENDPOINT = "https://upqg49f2a4.execute-api.us-east-1.amazonaws.com/prod/visitor" + '?' + 'id='+url_id;
