@@ -2,7 +2,7 @@ const counter = document.querySelector(".counter-number");
 
 const url = window.location.href;
 console.log(url);
-const urlParser = new URL(url_id);
+const urlParser = new URL(url);
 const url_id = urlParser.hostname;
 console.log(url_id);
 
