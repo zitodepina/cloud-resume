@@ -3,7 +3,6 @@ const counter = document.querySelector(".counter-number");
 const url_id = window.location.href;
 console.log(url_id);
 
-
 VISITORS_ENDPOINT = "https://upqg49f2a4.execute-api.us-east-1.amazonaws.com/prod/visitor" + '?' + 'id='+url_id;
 
 async function updateCounter() {
