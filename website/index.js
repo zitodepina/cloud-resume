@@ -6,7 +6,7 @@ const urlParser = new URL(url);
 const url_id = urlParser.hostname;
 console.log("hostname" + url_id);
 
-VISITORS_ENDPOINT = "https://xgynavamf9.execute-api.us-east-1.amazonaws.com/prod/visitor" + '?' + 'id='+url_id;
+VISITORS_ENDPOINT = "https://mntzgwvc80.execute-api.us-east-1.amazonaws.com/prod/visitor" + '?' + 'id='+url_id;
 
 async function updateCounter() {
     try {
