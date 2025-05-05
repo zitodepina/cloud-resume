@@ -2,6 +2,7 @@
 resource "aws_cloudfront_distribution" "cf_distribution" {
   
   enabled = true
+  web_acl_id             = aws_wafv2_web_acl.waf_web_acl.arn
   
   origin {
     origin_id                = local.s3_origin_id
@@ -72,13 +73,13 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 
 #Create Route53 Alias Record
 resource "aws_route53_record" "www_a" {
-  zone_id = var.route53_zone_id
+  zone_id = aws_route53_zone.route53_zone.zone_id # var.route53_zone_id
   name    = var.domain_name
   type    = "A"
 
   alias {
     name                   = aws_cloudfront_distribution.cf_distribution.domain_name
-    zone_id                = "Z2FDTNDATAQYW2" # CloudFront's zone ID
+    zone_id                = var.CloudFront_zone_id # CloudFront's zone ID
     evaluate_target_health = false
   }
 }

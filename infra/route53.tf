@@ -46,14 +46,9 @@ resource "aws_route53domains_domain" "route53-domain" {
     state             = "MA"
     zip_code          = "02301"
   }
-
-  /*lifecycle {
-       prevent_destroy = true
-     }
-     */
 }
 
-/*
+
 resource "aws_route53_zone" "route53_zone" {
   name = var.domain_name
-}*/
+}

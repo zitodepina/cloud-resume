@@ -28,11 +28,19 @@ variable "domain_name" {
     default = "adepina.com"
 }
 
+###TO DELETE############
 #route53 zone Id
 variable "route53_zone_id"{
     default = "Z0748855167ZVE7XK6EQX"
 }
 
+
+#cloudfront zone Id
+variable "CloudFront_zone_id"{
+    default = "Z2FDTNDATAQYW2" // set value for cloudfront distribution https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset-aliastarget.html
+}
+
+#alias
 variable "domain_alias"{
      default = "adepina.com"
 }
