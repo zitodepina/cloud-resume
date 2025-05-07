@@ -28,11 +28,6 @@ variable "domain_name" {
     default = "adepina.com"
 }
 
-###TO DELETE############
-#route53 zone Id
-variable "route53_zone_id"{
-    default = "Z0748855167ZVE7XK6EQX"
-}
 
 
 #cloudfront zone Id
